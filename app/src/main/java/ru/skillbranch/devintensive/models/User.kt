@@ -10,7 +10,7 @@ data class User(
     var avatar:String?,
     var rating:Int = 0,
     var respect:Int = 0,
-    var lastVisit: Date? = null,
+    var lastVisit: Date? = Date(),
     var isOnline: Boolean = false
     ) {
     constructor(idUser:String, firstName:String?, lastName:String?):this (
@@ -23,8 +23,8 @@ data class User(
     constructor(id: String): this (id, "Ivan", "Petrov")
 
     init {
-        println("I'm is Alive!!! \n${if (lastName==="Petrov") "Simple is  $firstName $lastName" else "Best of the best: $firstName $lastName"}\n" +
-                "${getIntro()}")
+//        println("I'm is Alive!!! \n${if (lastName==="Petrov") "Simple is  $firstName $lastName" else "Best of the best: $firstName $lastName"}\n" +
+//                "${getIntro()}")
     }
 
     private fun getIntro() = """
@@ -42,7 +42,7 @@ data class User(
             isOnline: $isOnline
         """.trimIndent())
 
-    companion object FactoryB {
+    companion object Factory {
         private var lastId: Int = -1
         fun makeUser(fullName: String?):User{
             lastId++
@@ -51,7 +51,30 @@ data class User(
             return User("$lastId",fName,lName)
         }
     }
-}
+
+    class Builder(
+        var id:String = "0",
+        var firstName:String? = null,
+        var lastName:String? = null,
+        var avatar:String? = null,
+        var rating:Int = 0,
+        var respect:Int = 0,
+        var lastVisit: Date? = Date(),
+        var isOnline: Boolean = false
+    ) {
+        fun id(id: String) = apply { this.id = id }
+        fun firstName(firstName: String) = apply { this.firstName = firstName }
+        fun lastName(lastName: String) = apply { this.lastName = lastName }
+        fun avatar(avatar: String) = apply { this.avatar = avatar }
+        fun rating(rating: Int) = apply { this.rating = rating }
+        fun respect(respect: Int) = apply { this.respect = respect }
+        fun lastVisit(lastVisit: Date) = apply { this.lastVisit = lastVisit }
+        fun isOnline(isOnline: Boolean) = apply { this.isOnline = isOnline }
+        fun build() = User(id = id, firstName = firstName, lastName = lastName, avatar = avatar, rating = rating, respect = respect,lastVisit = lastVisit,isOnline = isOnline)
+
+    }
+
+    }
 
 
 

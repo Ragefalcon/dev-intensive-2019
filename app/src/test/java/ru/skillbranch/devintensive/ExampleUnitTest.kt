@@ -3,11 +3,9 @@ package ru.skillbranch.devintensive
 import org.junit.Test
 
 import org.junit.Assert.*
-import ru.skillbranch.devintensive.extensions.TimeUnits
-import ru.skillbranch.devintensive.extensions.add
-import ru.skillbranch.devintensive.extensions.format
-import ru.skillbranch.devintensive.extensions.toUserView
+import ru.skillbranch.devintensive.extensions.*
 import ru.skillbranch.devintensive.models.*
+import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
 /**
@@ -115,4 +113,52 @@ class ExampleUnitTest {
         println(imgMessage.formatMessage())
     }
 
+    @Test
+    fun test_Hometask_2(){
+
+        val user = User.makeUser("Masha Pupkina")
+
+        val user2:User = User.Builder().id("123")
+            .firstName("Vasya")
+            .lastName("Pupkin")
+            .avatar("ads")
+            .rating(3)
+            .respect(1)
+            .lastVisit(Date().add(-5,TimeUnits.SECOND))
+            .isOnline(false)
+            .build()
+        user2.printMe()
+            // Builder().id("sdf")
+
+        println(BaseMessage.makeMessage(user, Chat("1") , Date(), "text", "any text message",true).formatMessage()) //Василий отправил сообщение "any text message" только что
+        println(BaseMessage.makeMessage(user2, Chat("1"), Date().add(-2, TimeUnits.HOUR), "image","https://anyurl.com", false).formatMessage()) //Василий получил изображение "https://anyurl.com" 2 часа назад
+
+        println(Utils.parseFullName(null)) //null null
+        println(Utils.parseFullName("")) //null null
+        println(Utils.parseFullName("    ")) //null null
+        println(Utils.parseFullName("John")) //John null
+        println(Utils.parseFullName("John Buba")) //John null
+
+        println(Utils.toInitials("john" ,"doe")) //JD
+        println(Utils.toInitials("John", null)) //J
+        println(Utils.toInitials(null, null)) //null
+        println(Utils.toInitials("", " ")) //null
+
+        println(Utils.transliteration("Женя Стереотипов")) //Zhenya Stereotipov
+        println(Utils.transliteration("Amazing Петр","_")) //Amazing_Petr
+
+        println(Date().add(-2, TimeUnits.HOUR).humanizeDiff()) //2 часа назад
+        println(Date().add(-5, TimeUnits.DAY).humanizeDiff()) //5 дней назад
+        println(Date().add(2, TimeUnits.MINUTE).humanizeDiff()) //через 2 минуты
+        println(Date().add(7, TimeUnits.DAY).humanizeDiff()) //через 7 дней
+        println(Date().add(-400, TimeUnits.DAY).humanizeDiff()) //более года назад
+        println(Date().add(400, TimeUnits.DAY).humanizeDiff()+"\n") //более чем через год
+
+        println(Date().add(21, TimeUnits.SECOND).humanizeDiff()) //2 часа назад
+        println(Date().add(3, TimeUnits.SECOND).humanizeDiff()) //5 дней назад
+        println(Date().add(-21, TimeUnits.MINUTE).humanizeDiff()) //через 2 минуты
+        println(Date().add(1, TimeUnits.DAY).humanizeDiff()) //через 7 дней
+        println(Date().add(21, TimeUnits.DAY).humanizeDiff()) //более года назад
+        println(Date().add(-1, TimeUnits.DAY).humanizeDiff()) //более чем через год
+    }
 }
