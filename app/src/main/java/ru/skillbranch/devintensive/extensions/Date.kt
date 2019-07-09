@@ -38,33 +38,33 @@ enum class TimeUnits {
     SECOND,
     MINUTE,
     HOUR,
-    DAY
-}
-fun TimeUnits.plural(value: Int):String{
-    var st1:String = "день"
-    var st2:String = "дня"
-    var st3:String = "дней"
-    when (this) {
-        TimeUnits.SECOND -> {st1 = "секунду"; st2 = "секунды"; st3 = "секунд"}
-        TimeUnits.MINUTE -> {st1 = "минуту"; st2 = "минуты"; st3 = "минут"}
-        TimeUnits.HOUR -> {st1 = "час"; st2 = "часа"; st3 = "часов"}
-        TimeUnits.DAY -> {st1 = "день"; st2 = "дня"; st3 = "дней"}
-    }
-
-
-
-    if ((value%100>4)&&(value%100<21)) {
-        return value.toString()+" "+st3
-    }   else    {
-        if (value%10==1) {
-            return value.toString()+" "+st1
-        } else  if ((value%10>1)&&(value%10<5)) {
-            return value.toString()+" "+st2
-        }   else    {
-            return value.toString()+" "+st3
+    DAY;
+    fun plural(value: Int):String{
+        var st1:String = "день"
+        var st2:String = "дня"
+        var st3:String = "дней"
+        when (this) {
+            TimeUnits.SECOND -> {st1 = "секунду"; st2 = "секунды"; st3 = "секунд"}
+            TimeUnits.MINUTE -> {st1 = "минуту"; st2 = "минуты"; st3 = "минут"}
+            TimeUnits.HOUR -> {st1 = "час"; st2 = "часа"; st3 = "часов"}
+            TimeUnits.DAY -> {st1 = "день"; st2 = "дня"; st3 = "дней"}
         }
-    }
 
+
+
+        if ((value%100>4)&&(value%100<21)) {
+            return value.toString()+" "+st3
+        }   else    {
+            if (value%10==1) {
+                return value.toString()+" "+st1
+            } else  if ((value%10>1)&&(value%10<5)) {
+                return value.toString()+" "+st2
+            }   else    {
+                return value.toString()+" "+st3
+            }
+        }
+
+    }
 }
 
 fun Date.humanizeDiff(date: Date = Date()):String {
