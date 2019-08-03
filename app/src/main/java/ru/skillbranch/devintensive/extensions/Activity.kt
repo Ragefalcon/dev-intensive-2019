@@ -5,7 +5,7 @@ import android.content.Context
 import android.graphics.Rect
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
 import android.opengl.ETC1.getHeight
 
