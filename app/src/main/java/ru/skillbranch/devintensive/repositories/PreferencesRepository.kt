@@ -41,8 +41,8 @@ object PreferencesRepository {
     fun saveProfile(profile: Profile) {
         Log.d("M_PreferencesRepository"," saveProfile Start")
         with(profile) {
-            putValue(FIRST_NAME to firstname)
-            putValue(LAST_NAME to lastname)
+            putValue(FIRST_NAME to firstName)
+            putValue(LAST_NAME to lastName)
             putValue(ABOUT to about)
             putValue(REPOSITORY to repository)
             putValue(RATING to rating)

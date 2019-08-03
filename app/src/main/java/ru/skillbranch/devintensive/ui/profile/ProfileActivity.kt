@@ -111,8 +111,8 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 
     private fun saveProfileInfo(){
         Profile(
-            firstname = et_first_name.text.toString(),
-            lastname = et_last_name.text.toString(),
+            firstName = et_first_name.text.toString(),
+            lastName = et_last_name.text.toString(),
             about = et_about.text.toString(),
             repository = et_repository.text.toString()
         ).apply {
@@ -126,8 +126,8 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
         viewFields = mapOf(
             "nickName" to tv_nick_name,
             "rank" to tv_rank,
-            "firstname" to et_first_name,
-            "lastname" to et_last_name,
+            "firstName" to et_first_name,
+            "lastName" to et_last_name,
             "about" to et_about,
             "repository" to et_repository,
             "rating" to tv_rating,
@@ -166,7 +166,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
     }
 
     private fun showCurrentMode(isEdit: Boolean) {
-        val info = viewFields.filter { setOf("firstname","lastname","about","repository").contains(it.key) }
+        val info = viewFields.filter { setOf("firstName","lastName","about","repository").contains(it.key) }
         for ((_,v) in info) {
             v as EditText
             v.isFocusable = isEdit
