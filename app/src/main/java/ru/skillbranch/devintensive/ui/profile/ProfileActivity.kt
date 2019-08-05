@@ -137,6 +137,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 
     private fun hideError() {
         wr_repository.setError(null)
+        wr_repository.isErrorEnabled=false
     }
 
 //    private class ActionListener private constructor(private val mainActivityWeakReference: WeakReference<ProfileActivity>) :

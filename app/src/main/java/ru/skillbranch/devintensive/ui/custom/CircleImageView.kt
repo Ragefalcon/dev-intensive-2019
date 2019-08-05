@@ -333,20 +333,25 @@ class CircleImageView @JvmOverloads constructor(
         setup()
     }
 
-    public fun getBorderColor(): Int {
+     public fun getBorderColor(): Int {
         return cv_borderColor
     }
 
     public fun setBorderColor(@ColorRes colorId: Int) {
-        if (colorId == cv_borderColor) {
+        if (resources.getColor(colorId, context.theme) == cv_borderColor) {
             return
         }
 
-        cv_borderColor = colorId
+        cv_borderColor = resources.getColor(colorId, context.theme)
         mBorderPaint.setColor(cv_borderColor)
         invalidate()
     }
     public fun setBorderColor(hex:String) {
-        setBorderColor(Color.parseColor(hex).toInt())// java.lang.Long.parseLong(hex, 16).
+        if (hex[0].toString() != "#") {
+        setBorderColor(Color.parseColor("#$hex").toInt())
+            // java.lang.Long.parseLong(hex, 16).
+    }   else    {
+            setBorderColor(Color.parseColor(hex).toInt())
+        }
     }
 }
