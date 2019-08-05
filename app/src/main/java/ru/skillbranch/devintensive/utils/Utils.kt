@@ -89,6 +89,24 @@ object Utils {
         return rez
     }
 
+    fun ValidRepository (rep:String):Boolean{
+
+        var rez=rep.trimEnd()
+        if (rez=="") return true
+        rez=rez.replace("^https://".toRegex(),"").replace("^www\\.".toRegex(),"")
+//        println(rez)
+        if ("^github\\.com/".toRegex().containsMatchIn(rez)) {
+            rez=rez.replace("^github\\.com/".toRegex(),"")
+            rez=rez.replace("/$".toRegex(),"")
+//            println(rez)
+            if (rez=="") return false
+            if ("/".toRegex().containsMatchIn(rez)) return false
+
+            if ("enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join".toRegex().matches(rez))return false
+            return true
+        }   else return false
+    }
+
     fun toInitials (firstName:String?, lastName:String?):String?{
         var rez:String? = null
         if (firstName!=null) {

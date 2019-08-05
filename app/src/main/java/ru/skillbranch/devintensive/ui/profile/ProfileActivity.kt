@@ -23,6 +23,11 @@ import ru.skillbranch.devintensive.extensions.isKeyboardOpen
 import ru.skillbranch.devintensive.models.Bender
 import ru.skillbranch.devintensive.models.Profile
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
+import java.util.*
+import android.view.KeyEvent
+import ru.skillbranch.devintensive.utils.Utils
+import java.lang.ref.WeakReference
+
 
 class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 //    lateinit var benderImage: ImageView
@@ -59,7 +64,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
         initViews(savedInstanceState)
         initViewModel()
 
-        Log.d("M_ProfileActivity","onCreate")
+        Log.d("M_ProfileActivity", "onCreate")
 //        // benderImage = findViewById(R.id.iv_bender)
 //        benderImage = iv_bender
 //        textTxt = tv_text
@@ -89,37 +94,75 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 //        sendBtn.setOnClickListener(this)
     }
 
-    private fun initViewModel(){
+    private fun initViewModel() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileData().observe(this, Observer { uploadUI(it) })
         viewModel.getTheme().observe(this, Observer { updateTheme(it) })
     }
 
     private fun updateTheme(mode: Int) {
-        Log.d("M_ProfileActivity","updateTheme $mode")
+        Log.d("M_ProfileActivity", "updateTheme $mode")
         delegate.setLocalNightMode(mode)
     }
 
     private fun uploadUI(profile: Profile) {
         profile.toMap().also {
-            for ((k,v) in viewFields){
-                v.text= it[k].toString()
+            for ((k, v) in viewFields) {
+                v.text = it[k].toString()
             }
         }
 
     }
 
-    private fun saveProfileInfo(){
+    private fun saveProfileInfo() {
         Profile(
             firstName = et_first_name.text.toString(),
             lastName = et_last_name.text.toString(),
             about = et_about.text.toString(),
             repository = et_repository.text.toString()
         ).apply {
-            Log.d("M_ProfileActivity","Перед viewModel.saveProfileData")
+            Log.d("M_ProfileActivity", "Перед viewModel.saveProfileData")
             viewModel.saveProfileData(this)
         }
     }
+
+    private fun shouldShowError(): Boolean {
+
+        return Utils.ValidRepository(et_repository.text.toString())
+    }
+
+    private fun showError() {
+        wr_repository.setError(getString(R.string.REPerror))
+    }
+
+    private fun hideError() {
+        wr_repository.setError(null)
+    }
+
+//    private class ActionListener private constructor(private val mainActivityWeakReference: WeakReference<ProfileActivity>) :
+//        TextView.OnEditorActionListener {
+//
+//        override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent): Boolean {
+//            val mainActivity = mainActivityWeakReference.get()
+//            if (mainActivity != null) {
+//                if (actionId == EditorInfo.IME_ACTION_GO && mainActivity!!.shouldShowError()) {
+//                    mainActivity!!.showError()
+//                } else {
+//                    mainActivity!!.hideError()
+//                }
+//            }
+//            return true
+//        }
+//
+//        companion object {
+//
+//            fun newInstance(mainActivity: ProfileActivity): ActionListener {
+//                val mainActivityWeakReference = WeakReference(mainActivity)
+//                return ActionListener(mainActivityWeakReference)
+//            }
+//        }
+//    }
+
     @SuppressLint("ResourceType")
     private fun initViews(savedInstanceState: Bundle?) {
 
@@ -133,15 +176,46 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
             "rating" to tv_rating,
             "respect" to tv_respect
         )
+//        et_repository.setOnEditorActionListener(ActionListener.newInstance(this))
+//        et_repository.setOnEditorActionListener { v, actionId, event ->
+//            Log.d("M_ProfileActivity","It is live")
+//            if (Utils.ValidRepository(v.text.toString())) {
+//                showError()
+//            } else {
+//                hideError()
+//            }
+//            true
+////            if(actionId == EditorInfo.IME_ACTION_DONE){
+////                sendBtn.callOnClick()
+////                Log.d("M_MainActivity", "Done button is pressed!!!!")
+////                true
+////            } else {
+////                false
+////            }
+//        }
+        et_repository.setOnKeyListener { v, actionId, event ->
+            Log.d("M_ProfileActivity", "It is live")
+            if (shouldShowError()) {
+                hideError()
+            } else {
+                showError()
+            }
+            false
+        }
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
         showCurrentMode(isEditMode)
 
         btn_edit.setOnClickListener {
-            if (isEditMode){
+            if (isEditMode) {
+                if (!shouldShowError()) {
+                    et_repository.setText("")
+                    hideError()
+                }
                 saveProfileInfo()
 //                iv_avatar.setBorderColor(Color.RED)
 //                iv_avatar.setBorderColor("#2196F3")
-            }   else    {
+            } else {
+                //   wr_repository.error("sadfas")
 //                iv_avatar.setBorderColor(Color.BLUE)
 //                iv_avatar.setBorderColor("#FC4C4C")
             }
@@ -166,8 +240,8 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
     }
 
     private fun showCurrentMode(isEdit: Boolean) {
-        val info = viewFields.filter { setOf("firstName","lastName","about","repository").contains(it.key) }
-        for ((_,v) in info) {
+        val info = viewFields.filter { setOf("firstName", "lastName", "about", "repository").contains(it.key) }
+        for ((_, v) in info) {
             v as EditText
             v.isFocusable = isEdit
             v.isFocusableInTouchMode = isEdit
@@ -178,8 +252,8 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
         ic_eye.visibility = if (isEdit) View.GONE else View.VISIBLE
         wr_about.isCounterEnabled = isEdit
 
-        with(btn_edit){
-            val filter: ColorFilter? = if (isEdit){
+        with(btn_edit) {
+            val filter: ColorFilter? = if (isEdit) {
                 PorterDuffColorFilter(
                     resources.getColor(R.color.color_accent, theme),
                     PorterDuff.Mode.SRC_IN
@@ -190,7 +264,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 
             val icon = if (isEdit) {
                 resources.getDrawable(R.drawable.ic_save_black_24dp, theme)
-            }   else    {
+            } else {
                 resources.getDrawable(R.drawable.ic_edit_black_24dp, theme)
             }
 
