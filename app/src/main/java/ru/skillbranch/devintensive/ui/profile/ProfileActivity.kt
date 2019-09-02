@@ -221,15 +221,54 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 //            }
 //        })
 
-        et_repository.setOnKeyListener { v, actionId, event ->
-            Log.d("M_ProfileActivity", "It is live")
-            if (shouldShowError()) {
-                hideError()
-            } else {
-                showError()
+//        et_repository.setOnKeyListener { v, actionId, event ->
+//            Log.d("M_ProfileActivity", "It is live")
+//            if (shouldShowError()) {
+//                hideError()
+//            } else {
+//                showError()
+//            }
+//            false
+//        }
+
+//        et_repository.setOnEditorActionListener{ v, actionId, event ->
+//            Log.d("M_ProfileActivity", "It is live")
+//            if (shouldShowError()) {
+//                hideError()
+//            } else {
+//                showError()
+//            }
+//            false
+//        }
+        et_repository.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) { }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("M_ProfileActivity", "It is live")
+                if (shouldShowError()) {
+                    hideError()
+                } else {
+                    showError()
+                }
+           //     afterTextChanged.invoke(s.toString())
             }
-            false
-        }
+        })
+//fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+//    this.addTextChangedListener(object: TextWatcher {
+//        override fun afterTextChanged(s: Editable?) { }
+//
+//        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+//
+//        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//            afterTextChanged.invoke(s.toString())
+//        }
+//    })
+//}        et_repository.afterTextChanged{
+//            wr_repository.isErrorEnabled = !Utils.validateURL(et_repository.text.toString())
+//            wr_repository.error = if (!Utils.validateURL(et_repository.text.toString())) "Невалидный адрес репозитория" else ""
+//        }
         wr_repository.isErrorEnabled = savedInstanceState?.getBoolean(IS_REPO_ERROR, false) ?: false
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
         showCurrentMode(isEditMode)
