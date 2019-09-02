@@ -7,6 +7,8 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -38,6 +40,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 
     companion object {
         const val IS_EDIT_MODE = "IS_EDIT_MODE"
+        const val IS_REPO_ERROR = "IS_REPO_ERROR"
     }
 
 
@@ -111,6 +114,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
                 v.text = it[k].toString()
             }
         }
+        iv_avatar.setInitialsImage(profile.firstName, profile.lastName)
 
     }
 
@@ -133,6 +137,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 
     private fun showError() {
         wr_repository.setError(getString(R.string.REPerror))
+        wr_repository.isErrorEnabled=true
     }
 
     private fun hideError() {
@@ -194,6 +199,28 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
 ////                false
 ////            }
 //        }
+
+//        et_repository.addTextChangedListener( TextWatcher() {
+//
+//            public void onTextChanged(CharSequence s, int start, int before,
+//                int count) {
+//                if(!s.equals("") ) {
+//                    //do your work here
+//                }
+//            }
+//
+//
+//
+//            public void beforeTextChanged(CharSequence s, int start, int count,
+//                int after) {
+//
+//            }
+//
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        })
+
         et_repository.setOnKeyListener { v, actionId, event ->
             Log.d("M_ProfileActivity", "It is live")
             if (shouldShowError()) {
@@ -203,6 +230,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
             }
             false
         }
+        wr_repository.isErrorEnabled = savedInstanceState?.getBoolean(IS_REPO_ERROR, false) ?: false
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
         showCurrentMode(isEditMode)
 
@@ -210,14 +238,19 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
             if (isEditMode) {
                 if (!shouldShowError()) {
                     et_repository.setText("")
-                    hideError()
                 }
+                hideError()
+                Log.d("M_ProfileActivity","HideError")
+                if (wr_repository.isErrorEnabled)
+                    Log.d("M_ProfileActivity","repErr=true")
+                else
+                    Log.d("M_ProfileActivity","repErr=false")
                 saveProfileInfo()
-//                iv_avatar.setBorderColor(Color.RED)
+//                iv_avatar.setBorderColor(R.color.color_accent)
 //                iv_avatar.setBorderColor("#2196F3")
             } else {
                 //   wr_repository.error("sadfas")
-//                iv_avatar.setBorderColor(Color.BLUE)
+//                iv_avatar.setBorderColor(R.color.color_accent_night)
 //                iv_avatar.setBorderColor("#FC4C4C")
             }
             isEditMode = !isEditMode
@@ -370,6 +403,7 @@ class ProfileActivity : AppCompatActivity() { //, View.OnClickListener
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putBoolean(IS_EDIT_MODE, isEditMode)
+        outState?.putBoolean(IS_REPO_ERROR, wr_repository.isErrorEnabled)
 
 //        outState?.putString("STATUS",benderObj.status.name)
 //        outState?.putString("QUESTION",benderObj.question.name)

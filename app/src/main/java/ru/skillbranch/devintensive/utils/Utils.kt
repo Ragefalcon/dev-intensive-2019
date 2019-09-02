@@ -100,7 +100,7 @@ object Utils {
             rez=rez.replace("/$".toRegex(),"")
 //            println(rez)
             if (rez=="") return false
-            if ("/| ".toRegex().containsMatchIn(rez)) return false
+            if ("/| |_|^-|-$|--|!|\\+".toRegex().containsMatchIn(rez)) return false
 
             if ("enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join".toRegex().matches(rez))return false
             return true

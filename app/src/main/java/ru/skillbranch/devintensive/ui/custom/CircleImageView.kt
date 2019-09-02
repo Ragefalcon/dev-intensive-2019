@@ -32,6 +32,7 @@ import android.view.ViewOutlineProvider
 import androidx.annotation.RequiresApi
 import android.view.View
 import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import kotlinx.android.synthetic.main.activity_profile.view.*
 import ru.skillbranch.devintensive.utils.Utils
@@ -354,11 +355,13 @@ class CircleImageView @JvmOverloads constructor(
     }
 
     public fun setBorderColor(@ColorRes colorId: Int) {
-        if (resources.getColor(colorId, context.theme) == cv_borderColor) {
+//        if (resources.getColor(colorId, context.theme) == cv_borderColor) {
+        if (ContextCompat.getColor(context, colorId) == cv_borderColor) {
             return
         }
 
-        cv_borderColor = resources.getColor(colorId, context.theme)
+
+        cv_borderColor = ContextCompat.getColor(context, colorId)//resources.getColor(colorId, context.theme)
         mBorderPaint.setColor(cv_borderColor)
         invalidate()
     }
