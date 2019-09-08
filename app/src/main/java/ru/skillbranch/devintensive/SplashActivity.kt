@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import ru.skillbranch.devintensive.repositories.PreferencesRepository
+import ru.skillbranch.devintensive.ui.main.MainActivity
 import ru.skillbranch.devintensive.ui.profile.ProfileActivity
 
 
@@ -19,7 +20,7 @@ class SplashActivity : AppCompatActivity() {
 //            AppCompatDelegate.setDefaultNightMode(it)
 //        }
 
-        val intent = Intent(this, ProfileActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }

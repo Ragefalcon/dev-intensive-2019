@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.activity_profile.view.*
 import ru.skillbranch.devintensive.utils.Utils
 
 
-class CircleImageView @JvmOverloads constructor(
+open class CircleImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -103,10 +103,10 @@ class CircleImageView @JvmOverloads constructor(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 outlineProvider = OutlineProvider()
             }
-            Log.d("M_CircleImageView", "init circle")
+//            Log.d("M_CircleImageView", "init circle")
             if (mSetupPending) {
                 setup()
-                Log.d("M_CircleImageView", "init if (mSetupPending)")
+//                Log.d("M_CircleImageView", "init if (mSetupPending)")
                 mSetupPending = false
             }
 
@@ -116,55 +116,55 @@ class CircleImageView @JvmOverloads constructor(
     private fun setup() {
         if (!mReady) {
             mSetupPending = true
-            Log.d("M_CircleImageView", "!mReady")
+//            Log.d("M_CircleImageView", "!mReady")
             return
         }
 
         if (width == 0 && height == 0) {
-            Log.d("M_CircleImageView", "width == 0 && height == 0")
+//            Log.d("M_CircleImageView", "width == 0 && height == 0")
             return
         }
 
         if (mBitmap == null) {
-            Log.d("M_CircleImageView", "mBitmap == null")
+//            Log.d("M_CircleImageView", "mBitmap == null")
             invalidate()
             return
         }
-        Log.d("M_CircleImageView", "setup()")
+//        Log.d("M_CircleImageView", "setup()")
 
         mBitmapShader = BitmapShader(mBitmap!!, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
 
-        Log.d("M_CircleImageView", "1")
+//        Log.d("M_CircleImageView", "1")
         mBitmapPaint.isAntiAlias = true
         mBitmapPaint.shader = mBitmapShader
-        Log.d("M_CircleImageView", "2")
+//        Log.d("M_CircleImageView", "2")
         mBorderPaint.style = Paint.Style.STROKE
         mBorderPaint.isAntiAlias = true
         mBorderPaint.color = cv_borderColor
         mBorderPaint.strokeWidth = cv_borderWidth
-        Log.d("M_CircleImageView", "3")
+//        Log.d("M_CircleImageView", "3")
         mCircleBackgroundPaint.style = Paint.Style.FILL
         mCircleBackgroundPaint.isAntiAlias = true
         mCircleBackgroundPaint.color = mCircleBackgroundColor
-        Log.d("M_CircleImageView", "4")
+//        Log.d("M_CircleImageView", "4")
         mBitmapHeight = mBitmap!!.height
         mBitmapWidth = mBitmap!!.width
-        Log.d("M_CircleImageView", "5")
+//        Log.d("M_CircleImageView", "5")
         mBorderRect.set(calculateBounds())
         mBorderRadius =
             Math.min((mBorderRect.height() - cv_borderWidth) / 2.0f, (mBorderRect.width() - cv_borderWidth) / 2.0f)
-        Log.d("M_CircleImageView", "6")
+//        Log.d("M_CircleImageView", "6")
         mDrawableRect.set(mBorderRect)
         if (!mBorderOverlay && cv_borderWidth > 0) {
             mDrawableRect.inset(cv_borderWidth - 1.0f, cv_borderWidth - 1.0f)
         }
         mDrawableRadius = Math.min(mDrawableRect.height() / 2.0f, mDrawableRect.width() / 2.0f)
-        Log.d("M_CircleImageView", "7")
+//        Log.d("M_CircleImageView", "7")
         //       applyColorFilter()
         updateShaderMatrix()
-        Log.d("M_CircleImageView", "8")
+//        Log.d("M_CircleImageView", "8")
         invalidate()
-        Log.d("M_CircleImageView", "9")
+//        Log.d("M_CircleImageView", "9")
     }
 
     private fun updateShaderMatrix() {
@@ -172,30 +172,30 @@ class CircleImageView @JvmOverloads constructor(
         var dx = 0f
         var dy = 0f
 
-        Log.d("M_CircleImageView", "updateShaderMatrix 1")
+//        Log.d("M_CircleImageView", "updateShaderMatrix 1")
         mShaderMatrix.set(null)
-        Log.d("M_CircleImageView", "updateShaderMatrix 2")
+//        Log.d("M_CircleImageView", "updateShaderMatrix 2")
 
         if (mBitmapWidth * mDrawableRect.height() > mDrawableRect.width() * mBitmapHeight) {
-            Log.d("M_CircleImageView", "updateShaderMatrix 31")
+//            Log.d("M_CircleImageView", "updateShaderMatrix 31")
             scale = mDrawableRect.height() / mBitmapHeight //as Float
             dx = (mDrawableRect.width() - mBitmapWidth * scale) * 0.5f
         } else {
-            Log.d("M_CircleImageView", "updateShaderMatrix 32")
+//            Log.d("M_CircleImageView", "updateShaderMatrix 32")
             scale = mDrawableRect.width() / mBitmapWidth //as Float
-            Log.d("M_CircleImageView", "updateShaderMatrix 321")
+//            Log.d("M_CircleImageView", "updateShaderMatrix 321")
             dy = (mDrawableRect.height() - mBitmapHeight * scale) * 0.5f
-            Log.d("M_CircleImageView", "updateShaderMatrix 322")
+//            Log.d("M_CircleImageView", "updateShaderMatrix 322")
         }
 
-        Log.d("M_CircleImageView", "updateShaderMatrix 4")
+//        Log.d("M_CircleImageView", "updateShaderMatrix 4")
         mShaderMatrix.setScale(scale, scale)
-        Log.d("M_CircleImageView", "updateShaderMatrix 5")
+//        Log.d("M_CircleImageView", "updateShaderMatrix 5")
         mShaderMatrix.postTranslate((dx + 0.5f).toInt() + mDrawableRect.left, (dy + 0.5f).toInt() + mDrawableRect.top)
 
-        Log.d("M_CircleImageView", "updateShaderMatrix 6")
+//        Log.d("M_CircleImageView", "updateShaderMatrix 6")
         mBitmapShader?.setLocalMatrix(mShaderMatrix)
-        Log.d("M_CircleImageView", "updateShaderMatrix 7")
+//        Log.d("M_CircleImageView", "updateShaderMatrix 7")
     }
 
 
@@ -302,10 +302,10 @@ class CircleImageView @JvmOverloads constructor(
     private fun initializeBitmap() {
         if (mDisableCircularTransformation) {
             mBitmap = null
-            Log.d("M_CircleImageView", "initializeBitmap  mBitmap = null")
+//            Log.d("M_CircleImageView", "initializeBitmap  mBitmap = null")
         } else {
             mBitmap = getBitmapFromDrawable(drawable)
-            Log.d("M_CircleImageView", "initializeBitmap getBitmapFromDrawable(drawable)")
+//            Log.d("M_CircleImageView", "initializeBitmap getBitmapFromDrawable(drawable)")
         }
         setup()
     }
@@ -382,6 +382,34 @@ class CircleImageView @JvmOverloads constructor(
             setImageDrawable(resources.getDrawable(R.drawable.avatar_default, context.theme))
         }   else {
             val Initials = Utils.toInitials(fN, lN)!!
+            setInitials(Initials)
+//            val bitmap = createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
+//            val canvas = Canvas(bitmap)
+//
+//            val value = TypedValue()
+//            context.theme.resolveAttribute(R.attr.colorAccent, value, true)
+//
+//            val textScaleValue = bitmap.width / 200f
+//
+//            val paintText = Paint().apply {
+//                color = Color.WHITE
+//                textAlign = Paint.Align.CENTER
+//                textSize = 80 * textScaleValue
+//            }
+//
+//            canvas.drawColor(value.data)
+//            canvas.drawText(
+//                Initials,
+//                bitmap.width / 2f,
+//                (bitmap.height + 65 * textScaleValue) / 2f,
+//                paintText
+//            )
+//
+//            setImageBitmap(bitmap)
+        }
+        invalidate()
+    }
+    fun setInitials(Initials: String) {
             val bitmap = createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
 
@@ -405,7 +433,6 @@ class CircleImageView @JvmOverloads constructor(
             )
 
             setImageBitmap(bitmap)
-        }
         invalidate()
     }
 
