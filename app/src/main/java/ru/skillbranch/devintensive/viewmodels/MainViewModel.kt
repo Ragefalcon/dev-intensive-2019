@@ -65,7 +65,7 @@ class MainViewModel : ViewModel() {
                         "${users.size}",
                         null,
                         "",
-                        "",
+                        "Архив чатов",
                         lastMes.first,
                         messCount,//unreadableMessageCount(),
                         messDat?.shortFormat(),
