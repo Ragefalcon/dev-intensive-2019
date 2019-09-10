@@ -39,7 +39,7 @@ class MainViewModel : ViewModel() {
                 archiveChat?.forEach {
 //                    messAr = it.messages?.filter { !it.isReaded }.toMutableList()
 //                        messAr.sortByDescending { it.date }
-                    if (it.unreadableMessageCount()!=0){
+                    if (it.messages.count()!=0){
                         if(messCount == 0) {
                             lastMes = it.lastMessageShort()
                             messDat = it.lastMessageDate()!!
@@ -49,6 +49,16 @@ class MainViewModel : ViewModel() {
                         }
                         messCount += it.unreadableMessageCount()
                     }
+//                    if (it.unreadableMessageCount()!=0){
+//                        if(messCount == 0) {
+//                            lastMes = it.lastMessageShort()
+//                            messDat = it.lastMessageDate()!!
+//                        } else if (messDat<it.lastMessageDate()) {
+//                            lastMes = it.lastMessageShort()
+//                            messDat = it.lastMessageDate()!!
+//                        }
+//                        messCount += it.unreadableMessageCount()
+//                    }
                 }
                 users.add(
                     ChatItem(
@@ -61,7 +71,7 @@ class MainViewModel : ViewModel() {
                         messDat?.shortFormat(),
                         false,
                         ChatType.ARCHIVE,
-                        lastMes.second
+                        if(lastMes.second!="") "@${lastMes.second}" else lastMes.second
                     )
                 )
             } //else  {

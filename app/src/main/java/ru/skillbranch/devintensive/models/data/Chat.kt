@@ -64,7 +64,8 @@ data class Chat(
                 lastMessageDate()?.shortFormat(),
                 false,
                 ChatType.GROUP,
-                lastMessageShort().second
+//                lastMessageShort().second
+                if(lastMessageShort().second!="") "@${lastMessageShort().second}" else lastMessageShort().second
             )
         }
     }
