@@ -1,5 +1,6 @@
 package ru.skillbranch.devintensive.repositories
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import ru.skillbranch.devintensive.data.managers.CacheManager
 import ru.skillbranch.devintensive.models.data.Chat
@@ -9,6 +10,11 @@ object ChatRepository {
     private val chats = CacheManager.loadChats()
 
     fun loadChats(): MutableLiveData<List<Chat>> {
+//        val newItems = DataGenerator.generateChatsWithOffset(chats.value!!.size,5).map { it.toChatItem() }
+//        val copy = chats.value!!.toMutableList()
+//        copy.addAll(newItems)
+//        chats.value = copy.sortedBy { it.id.toInt() }
+//        Log.d("M_MainViewModel","FunAddItem")
         return chats
     }
 

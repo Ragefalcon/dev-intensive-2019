@@ -5,7 +5,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.group.GroupActivity">
+        tools:context=".ui.group.GroupActivity"
+        android:background="?attr/colorBG"
+>
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -16,6 +18,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:title="@string/title_group_activity"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
         </androidx.appcompat.widget.Toolbar>

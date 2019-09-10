@@ -1,6 +1,7 @@
 package ru.skillbranch.devintensive.ui.group
 
 import android.content.res.ColorStateList
+import android.graphics.Canvas
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,17 +9,27 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.activity_group.*
+import kotlinx.android.synthetic.main.activity_profile.view.*
+import kotlinx.android.synthetic.main.item_chat_single.*
+import kotlinx.android.synthetic.main.item_user_list.*
 import ru.skillbranch.devintensive.R
+import ru.skillbranch.devintensive.extensions.ListPaddingDecoration
 import ru.skillbranch.devintensive.models.data.UserItem
+import ru.skillbranch.devintensive.repositories.PreferencesRepository
 import ru.skillbranch.devintensive.ui.adapters.UserAdapter
+import ru.skillbranch.devintensive.ui.custom.AvatarImageView
 import ru.skillbranch.devintensive.viewmodels.GroupViewModel
 
 class GroupActivity : AppCompatActivity() {
@@ -70,7 +81,8 @@ class GroupActivity : AppCompatActivity() {
 
     private fun initViews() {
         usersAdapter = UserAdapter { viewModel.handleSelectedItem(it.id) }
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+//        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        val divider = ListPaddingDecoration(this,(resources.getDimension(R.dimen.spacing_normal_16)*2+resources.getDimension(R.dimen.avatar_item_size)).toInt(),0)
         with(rv_user_list) {
             adapter = usersAdapter
             layoutManager = LinearLayoutManager(this@GroupActivity)
@@ -99,16 +111,41 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun addChipToGroup(user: UserItem) {
+        val color = if (PreferencesRepository.getAppTheme() == AppCompatDelegate.MODE_NIGHT_NO) {
+            resources.getColor(R.color.color_primary_light, theme)
+        } else {
+            resources.getColor(R.color.color_gray_dark2, theme)
+        }
+        val color2 = if (PreferencesRepository.getAppTheme() == AppCompatDelegate.MODE_NIGHT_NO) {
+            resources.getColor(R.color.color_white, theme)
+        } else {
+            resources.getColor(R.color.color_gray, theme)
+        }
+//        usersAdapter. items.find {  }
+        var img = AvatarImageView(this)
+
         val chip = Chip(this).apply {
             text = user.fullName
             chipIcon = resources.getDrawable(R.drawable.avatar_default, theme)
             isCloseIconVisible = true
             tag = user.id
             isClickable = true
-            closeIconTint = ColorStateList.valueOf(Color.WHITE)
-            chipBackgroundColor = ColorStateList.valueOf(getColor(R.color.color_primary_light))
+            closeIconTint = ColorStateList.valueOf(color2)
+            chipBackgroundColor = ColorStateList.valueOf(color)//getColor(R.color.color_primary_light))
             setTextColor(Color.WHITE)
         }
+//        if (user.avatar == null) {
+////            Glide.with(chip) // передаем источник контекста
+////                .clear(iv_avatar_single)
+////            // а здесь нужно включать experimental в build.gradle app
+////            iv_avatar_single.setInitials(user.initials ?: "")
+//            img.setInitials(user.initials ?: "??")// setImageDrawable(resources.getDrawable(R.drawable.avatar_default, theme))
+//        }   else    {
+//            chip.chipIcon = Glide.with(chip) // передаем источник контекста
+//                .load(user.avatar) // передаем uri/url
+//                .fallbackDrawable// into(chip.chipIcon) // таргет в который должны вставить изображение
+//
+//        }
         chip.setOnCloseIconClickListener { viewModel.handleRemoveChip(it.tag.toString()) }
         chip_group.addView(chip)
     }

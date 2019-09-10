@@ -5,16 +5,14 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.view.View
-import android.view.accessibility.AccessibilityManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.ChatItem
-import ru.skillbranch.devintensive.models.data.ChatType
 import ru.skillbranch.devintensive.repositories.PreferencesRepository
 
-class ChatItemTouchHelperCallback(
+class ArchiveChatItemTouchHelperCallback(
     val adapter: ChatAdapter,
     val swipeListener: (ChatItem) -> Unit
 ) : ItemTouchHelper.Callback() {
@@ -40,7 +38,7 @@ class ChatItemTouchHelperCallback(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 //        if (adapter.items[viewHolder.adapterPosition].chatType != ChatType.ARCHIVE)
-            swipeListener.invoke(adapter.items[viewHolder.adapterPosition])
+        swipeListener.invoke(adapter.items[viewHolder.adapterPosition])
     }
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
@@ -73,7 +71,7 @@ class ChatItemTouchHelperCallback(
     }
 
     private fun drawIcon(canvas: Canvas, itemView: View, dX: Float) {
-        val icon = itemView.resources.getDrawable(R.drawable.ic_archive_black_24dp, itemView.context.theme)
+        val icon = itemView.resources.getDrawable(R.drawable.ic_unarchive_black_24dp, itemView.context.theme)
         val iconSize = itemView.resources.getDimensionPixelSize(R.dimen.icon_size)
         val space = itemView.resources.getDimensionPixelSize(R.dimen.spacing_normal_16)
 
@@ -102,14 +100,9 @@ class ChatItemTouchHelperCallback(
             } else {
                 itemView.resources.getColor(R.color.color_accent_night, itemView.context.theme)
             }
-//            color = itemView.resources.getColor(R.attr.color_primary_dark, itemView.context.theme)
+//            color = itemView.resources.getColor(R.color.color_primary_dark, itemView.context.theme)
         }
 
         canvas.drawRect(bgRect, bgPaint)
     }
-}
-
-interface ItemTouchViewHolder {
-    fun onItemSelected()
-    fun onItemCleared()
 }

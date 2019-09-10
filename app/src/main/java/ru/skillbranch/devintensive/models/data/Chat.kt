@@ -30,12 +30,12 @@ data class Chat(
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun lastMessageShort(): Pair<String, String?> = when(val lastMessage = messages.lastOrNull()){
-       // messages.sortedByDescending { it.date }.first()
-        is ImageMessage -> Pair("${lastMessage.from.firstName} - отправил фото",lastMessage.from.firstName)
-        is TextMessage -> Pair(lastMessage.text ?: "",lastMessage.from.firstName)
-        null -> Pair("Сообщений еще нет","")
-        else -> Pair("Сообщений еще нет","")
+    fun lastMessageShort(): Pair<String, String?> = when (val lastMessage = messages.lastOrNull()) {
+        // messages.sortedByDescending { it.date }.first()
+        is ImageMessage -> Pair("${lastMessage.from.firstName} - отправил фото", lastMessage.from.firstName)
+        is TextMessage -> Pair(lastMessage.text ?: "", lastMessage.from.firstName)
+        null -> Pair("Сообщений еще нет", "")
+        else -> Pair("Сообщений еще нет", "")
     }
 
     private fun isSingle(): Boolean = members.size == 1
@@ -68,9 +68,28 @@ data class Chat(
             )
         }
     }
+
+    fun toChatArchiveItem(): ChatItem {
+
+        val user = members.first()
+        return ChatItem(
+            id,
+            null,
+            "",
+            "",
+            null,//lastMessageShort().first,
+            0,//unreadableMessageCount(),
+            null,//lastMessageDate()?.shortFormat(),
+            false,
+            ChatType.ARCHIVE,
+            null//lastMessageShort().second
+        )
+
+
+    }
 }
 
-enum class ChatType{
+enum class ChatType {
     SINGLE,
     GROUP,
     ARCHIVE
