@@ -31,7 +31,7 @@ class MainViewModel : ViewModel() {
             val queryStr = query.value!!
             val users = mutableListOf<ChatItem>()
             val archiveChat = chatRepository.loadChats().value?.filter { it.isArchived }?.toMutableList()
-            if (archiveChat?.count() ?: 0 != 0 && queryStr.isEmpty()) {//chats.value!!.count()) {
+            if (archiveChat?.count() ?: 0 != 0) {//chats.value!!.count()) {
                 var messCount = 0
                 var messDat: Date = Date()
                 var messAr:MutableList<BaseMessage>
@@ -78,7 +78,7 @@ class MainViewModel : ViewModel() {
             users.addAll(chats.value!!.toMutableList())
             //   }
             result.value = if (queryStr.isEmpty()) users
-            else users.filter { it.title.contains(queryStr, true) }
+            else users.filter {it.title.contains(queryStr, true) }
         }
 
         result.addSource(chats) { filterF.invoke() }
